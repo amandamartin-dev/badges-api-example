@@ -1,0 +1,24 @@
+import { badges } from 'wix-members-backend';
+
+export function getMemberBadges(memberID) {
+
+  return badges.listMemberBadges([memberID])
+    .then((memberBadges) => {
+      return memberBadges;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+export function getKoalaBadge(member) {
+  const badgeId = "YOUR-BADGE-ID";
+ 
+  return badges.assignMembers(badgeId, [member])
+    .then((assignedMembers) => {
+      return assignedMembers;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
