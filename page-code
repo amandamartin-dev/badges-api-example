@@ -1,0 +1,57 @@
+//this code should live in the page you are displaying badges
+
+import { currentMember } from 'wix-members';
+import { getMemberBadges, getKoalaBadge } from 'backend/getBadges'
+import wixData from 'wix-data'
+
+const options = {
+    fieldsets: ['FULL']
+}
+
+$w.onReady(async function () {
+
+    $w('#myBadges').data = []
+
+    const loggedInMember = await currentMember.getMember(options);
+
+    const memberBadges = await getMemberBadges(loggedInMember._id);
+
+    if (memberBadges) {
+        myBadges(memberBadges)
+    }
+
+    $w('#getKoalas').onClick(async () => {
+        let koalas = await getKoalaBadge(loggedInMember._id);
+        if (koalas) {
+            updateBadgeRepeater(loggedInMember._id)
+            $w('#koalas').show()
+            $w('#koalas').expand()
+        }
+    })
+
+});
+
+function myBadges(memberBadges) {
+    wixData.query("Members/Badges")
+        .hasSome('_id', memberBadges[0].badgeIds)
+        .find()
+        .then((results) => {
+            console.log(results.items)
+            $w('#myBadges').data = results.items;
+            $w('#myBadges').onItemReady(($item, itemData, index) => {
+                $item("#badgeName").text = itemData.title;
+                $item("#badgeRules").text = itemData.description;
+                $item("#badgeIcon").src = itemData.icon;
+            })
+            $w('#myBadges').expand();
+        });
+}
+
+function updateBadgeRepeater(memberId) {
+    getMemberBadges(memberId).then((results) => {
+       if(results.length > 0){
+        myBadges(results)
+       }
+    })
+
+}
