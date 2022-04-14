@@ -10,3 +10,4 @@ https://www.wix.com/velo/reference/wix-members-backend/badges
 https://www.wix.com/velo/reference/wix-members/currentmember
 https://www.wix.com/velo/reference/wix-data/query
 
+YouTube Video: https://youtu.be/ual1innAESg
